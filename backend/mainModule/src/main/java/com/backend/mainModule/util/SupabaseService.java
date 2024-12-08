@@ -3,6 +3,7 @@ package com.backend.mainModule.util;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.json.JSONObject;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,9 +13,10 @@ import java.net.http.HttpResponse;
 
 @Service
 public class SupabaseService {
+    Dotenv dotenv = Dotenv.configure().directory("backend/mainModule/src/main/java/com/backend/mainModule/.env").load();
 
     private static final String BASE_URL = "https://jbjebgnyyscabvtkvuzf.supabase.co/storage/v1/object";
-    private static final String AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiamViZ255eXNjYWJ2dGt2dXpmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzU1MjQ2MywiZXhwIjoyMDQ5MTI4NDYzfQ.mp34nGy5ng-S6WxzXnZAH5fZTPqyRqqP4uPpMHUT0-Y";
+    private  final String AUTH_TOKEN = dotenv.get("AUTH_TOKEN");
     private static final String BUCKET_NAME = "resumes";
 
     public String getUrl(String fileName) throws IOException, InterruptedException {
