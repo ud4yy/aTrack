@@ -7,15 +7,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Table(name = "user")
+@Table(name = "userr")
 @Data
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int UID;
+    private int uid;
     private String userName;
     private String password;
     private role Role;

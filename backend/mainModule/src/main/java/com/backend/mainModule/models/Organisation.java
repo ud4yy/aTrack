@@ -12,12 +12,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table (name = "organisation")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Organisation {
 
     @Id
@@ -34,4 +36,11 @@ public class Organisation {
     private LocalDateTime updatedAt; 
     @OneToMany(mappedBy = "organisation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs; // List of jobs associated with this organisation
+
+    @OneToMany(mappedBy = "organisation")
+    private List<HR> hrList;
+
+    @OneToMany(mappedBy = "organisation")
+    private List<Manager> mgrList;
+
 }

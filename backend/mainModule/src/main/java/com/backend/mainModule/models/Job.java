@@ -23,16 +23,16 @@ public class Job {
     private String location;       
     private String employmentType; 
     @ManyToOne
-    @JoinColumn(name = "hrID", referencedColumnName =  "hr_id")
+    @JoinColumn(name = "id")
     private HR hr;
 
     @Column(columnDefinition = "jsonb")
     private List<String> keywords;
 
     @ManyToOne
-    @JoinColumn(name = "orgID", referencedColumnName = "orgId") 
+    @JoinColumn(name = "orgID")
     private Organisation organisation;
 
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Applicants> applicants;
 }

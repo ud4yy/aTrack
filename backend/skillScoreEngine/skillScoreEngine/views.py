@@ -5,6 +5,7 @@ import os
 import io
 import pdf2image
 import pytesseract
+from django.views.decorators.csrf import csrf_exempt
 
 from collections import Counter
 import re
@@ -101,7 +102,6 @@ def getLacksandSkills(job_k, skill_k):
         return {"matching_skills": [], "lacking_skills": []}
 
 def score(request):
-    # Example PDF path (should ideally come from user input)
     pdf_path = "/home/uday/SDP/aTrack/skillScoreEngine/JUday.pdf"
     
     try:
@@ -125,7 +125,49 @@ def score(request):
     print(ans_dict)
     return JsonResponse(ans_dict)
 
+@csrf_exempt
+def jobkey(request):
+    try:
+        reqbody = json.loads(request.body)
+        jobdesc = reqbody.get("description")
+        if not jobdesc:
+            return JsonResponse({"error": "Job desc is required"},status=400)
+        
+        keywords =  extract_skills_from_text(jobdesc)
+        
+        return JsonResponse({"keywords": keywords},status=200)
+   
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON body."}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
+
+@csrf_exempt
+def reskey(request):
+    if request.method == 'POST':
+        # Check if a file is included in the request
+        if 'pdf_file' not in request.FILES:
+            return JsonResponse({"error": "No PDF file found in request."}, status=400)
+        
+        pdf_file = request.FILES['pdf_file']
+        
+        # Check if the file is a PDF
+        if not pdf_file.name.endswith('.pdf'):
+            return JsonResponse({"error": "File is not a PDF."}, status=400)
+        
+        pdf_path = default_storage.save(f"pdfs/{pdf_file.name}", ContentFile(pdf_file.read()))
+
+        text = extract_text_from_pdf(pdf_path)
+        candidate_skills = extract_skills_from_text(text)
+        default_storage.delete(pdf_path)
+
+        return JsonResponse({"candidate_skills": candidate_skills}, status=200)
+    
+    else:
+        return JsonResponse({"error": "Only POST method is allowed."}, status=405)
+
 def home(request):
+    
     return HttpResponse("Home is this")
 
 

@@ -7,27 +7,31 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @AllArgsConstructor
 @Table(name = "manager")
+@NoArgsConstructor
 public class Manager {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long managerID; // Unique ID for each applicant
+    private Long managerID; 
     
+    @MapsId
     @OneToOne
-    @JoinColumn(name = "userID", referencedColumnName = "UID") 
+    @JoinColumn(name = "uid")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "organisation_id", referencedColumnName = "orgId") 
+    @ManyToOne
+    @JoinColumn(name = "orgId")
     private Organisation organisation;
 
     private String email;

@@ -21,5 +21,7 @@ from skillScoreEngine import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', views.home, name='home'),
-    path('score/',views.score,name='score')
+    path('score/',views.score,name='score'),
+    path('jobkeywords/',views.jobkey,name = 'jobkey'),
+    path('reskeywords/',view.reskey,name='reskey')
 ]
